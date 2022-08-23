@@ -45,6 +45,7 @@ view: tbl_products {
   drill_fields: [id]
 
   dimension: id {
+    label: "Product ID"
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
@@ -61,7 +62,7 @@ view: tbl_products {
   }
 
   dimension: colors {
-    hidden: yes
+    # hidden: yes
     sql: ${TABLE}.colors ;;
   }
 
@@ -73,6 +74,12 @@ view: tbl_products {
   dimension: cost {
     type: number
     sql: ${TABLE}.cost ;;
+  }
+
+  measure: average_cost {
+    type: average
+    sql: ${cost} ;;
+    value_format_name: usd_0
   }
 
   dimension: currency_code {
@@ -100,12 +107,13 @@ view: tbl_products {
   }
 
   dimension: gtin {
+    hidden: yes
     type: string
     sql: ${TABLE}.gtin ;;
   }
 
   dimension: images {
-    hidden: yes
+    # hidden: yes
     sql: ${TABLE}.images ;;
   }
 
@@ -117,6 +125,12 @@ view: tbl_products {
   dimension: price {
     type: number
     sql: ${TABLE}.price ;;
+  }
+
+  measure: average_price {
+    type: average
+    sql: ${price} ;;
+    value_format_name: usd_0
   }
 
   dimension_group: price_effecitve {
@@ -148,21 +162,24 @@ view: tbl_products {
   }
 
   dimension: primary_product_id {
+    hidden: yes
     type: string
     sql: ${TABLE}.primary_product_id ;;
   }
 
   dimension: result {
+    hidden: yes
     type: string
     sql: ${TABLE}.result ;;
   }
 
   dimension: sizes {
-    hidden: yes
+    # hidden: yes
     sql: ${TABLE}.sizes ;;
   }
 
   dimension: title {
+    label: "Product Name"
     type: string
     sql: ${TABLE}.title ;;
   }
@@ -173,11 +190,13 @@ view: tbl_products {
   }
 
   dimension: uri {
+    hidden: yes
     type: string
     sql: ${TABLE}.uri ;;
   }
 
   measure: count {
+    label: "Count of Products"
     type: count
     drill_fields: [id]
   }
@@ -213,6 +232,8 @@ view: tbl_products__colors {
 
 view: tbl_products__categories {
   dimension: tbl_products__categories {
+    view_label: "Products"
+    label: "Category"
     type: string
     sql: tbl_products__categories ;;
   }

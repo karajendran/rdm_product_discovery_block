@@ -27,4 +27,11 @@ explore: events {
     relationship: one_to_many
   }
 
+  join: order_facts {
+    from: mv_sales
+    view_label: "Order Details"
+    sql_on: ${events.purchase_transaction__id} = ${order_facts.tx_id} ;;
+    relationship: one_to_many
+  }
+
 }

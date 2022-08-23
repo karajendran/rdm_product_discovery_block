@@ -47,7 +47,7 @@ parameter: compare_to {
 ## ------------------ HIDDEN HELPER DIMENSIONS  ------------------ ##
 
 dimension: days_in_period {
-  # hidden:  yes
+  hidden:  yes
   view_label: "Period Over Period Analysis"
   description: "Gives the number of days in the current period date range"
   type: number
@@ -55,7 +55,7 @@ dimension: days_in_period {
 }
 
 dimension: period_2_start {
-  # hidden:  yes
+  hidden:  yes
   view_label: "Period Over Period Analysis"
   description: "Calculates the start of the previous period"
   type: date
@@ -69,7 +69,7 @@ dimension: period_2_start {
 }
 
 dimension: period_2_end {
-  # hidden:  yes
+  hidden:  yes
   view_label: "Period Over Period Analysis"
   description: "Calculates the end of the previous period"
   type: date
@@ -127,6 +127,7 @@ dimension: order_for_period {
 ## ------------------ DIMENSIONS TO PLOT ------------------ ##
 
 dimension_group: date_in_period {
+  hidden: yes
   description: "Use this as your grouping dimension when comparing periods. Aligns the previous periods onto the current period"
   label: "Current Period"
   type: time
@@ -151,7 +152,7 @@ dimension_group: date_in_period {
 
 dimension: period {
   view_label: "Period Over Period Analysis"
-  label: "Period"
+  label: "3. Select to Compare Periods"
   description: "Pivot me! Returns the period the metric covers, i.e. either the 'This Period' or 'Previous Period'"
   type: string
   order_by_field: order_for_period

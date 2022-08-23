@@ -45,6 +45,12 @@ view: tbl_events {
     sql: ${TABLE}.product_details ;;
   }
 
+  dimension: product_details_array_length {
+    hidden: yes
+    type: number
+    sql: ARRAY_LENGTH(${product_details}) ;;
+  }
+
   dimension: purchase_transaction__cost {
     type: number
     sql: ${TABLE}.purchase_transaction.cost ;;
@@ -66,6 +72,13 @@ view: tbl_events {
     group_item_label: "ID"
   }
 
+  measure: count_of_transactions {
+    group_label: "Purchase & Transaction Events"
+    label: "Count of Transactions"
+    type: count_distinct
+    sql: ${purchase_transaction__id} ;;
+  }
+
   dimension: purchase_transaction__revenue {
     type: number
     sql: ${TABLE}.purchase_transaction.revenue ;;
@@ -85,9 +98,23 @@ view: tbl_events {
     sql: TRIM(UPPER(${TABLE}.search_query)) ;;
   }
 
+  measure: count_of_search_query {
+    group_label: "Search Events"
+    label: "Count of Search Queries"
+    type: count_distinct
+    sql: ${search_query} ;;
+  }
+
   dimension: session_id {
     type: string
     sql: TRIM(UPPER(${TABLE}.session_id)) ;;
+  }
+
+  measure: count_of_sessions {
+    group_label: "General Counts"
+    label: "Count of Sessions"
+    type: count_distinct
+    sql: ${session_id} ;;
   }
 
   dimension: user_id {
@@ -95,12 +122,27 @@ view: tbl_events {
     sql: TRIM(UPPER(${TABLE}.user_id)) ;;
   }
 
+  measure: count_of_users {
+    group_label: "General Counts"
+    label: "Count of Users"
+    type: count_distinct
+    sql: ${user_id} ;;
+  }
+
   dimension: visitor_id {
     type: string
     sql: TRIM(UPPER(${TABLE}.visitor_id)) ;;
   }
 
+  measure: count_of_visitors {
+    group_label: "General Counts"
+    label: "Count of Visitors"
+    type: count_distinct
+    sql: ${visitor_id} ;;
+  }
+
   measure: count {
+    group_label: "General Counts"
     label: "Count of Events"
     type: count
     drill_fields: []
@@ -112,6 +154,7 @@ view: tbl_events {
   #             WHEN ${event_type} =  'purchase-complete' THEN '4) Purchase'
 
   measure: count_of_detail_page_views {
+    group_label: "Page View Events"
     label: "Count of Detail Page Views"
     type: count
     filters: [event_type: "detail-page-view"]
@@ -119,6 +162,7 @@ view: tbl_events {
   }
 
   measure: count_of_search_events{
+    group_label: "Search Events"
     label: "Count of Search Events"
     type: count
     filters: [event_type: "search"]
@@ -126,6 +170,7 @@ view: tbl_events {
   }
 
   measure: count_of_add_to_cart_events {
+    group_label: "Cart Events"
     label: "Count of Add to Cart Events"
     type: count
     filters: [event_type: "add-to-cart"]
@@ -133,25 +178,91 @@ view: tbl_events {
   }
 
   measure: count_of_purchase_events {
+    group_label: "Purchase & Transaction Events"
     label: "Count of Purchase Events"
     type: count
     filters: [event_type: "purchase-complete"]
     drill_fields: []
   }
+
+  measure: count_of_purchase_product {
+    group_label: "Purchase & Transaction Events"
+    label: "Count of Purchased Products"
+    type: sum
+    filters: [event_type: "purchase-complete"]
+    sql:   ${product_details_array_length} ;;
+    drill_fields: []
+  }
+
+  measure: average_purchase_product {
+    group_label: "Purchase & Transaction Events"
+    label: "Average Purchased Products"
+    type: average
+    filters: [event_type: "purchase-complete"]
+    sql:   ${product_details_array_length}  ;;
+    value_format_name: decimal_0
+    drill_fields: []
+  }
+
+  measure: count_of_search_product_results {
+    group_label: "Search Events"
+    label: "Count of Search Product Results"
+    type: sum
+    filters: [event_type: "search"]
+    sql:   ${product_details_array_length}  ;;
+    drill_fields: []
+  }
+
+  measure: average_search_product_results {
+    group_label: "Search Events"
+    label: "Average Search Product Results"
+    type: average
+    filters: [event_type: "search"]
+    sql:  ${product_details_array_length} ;;
+    value_format_name: decimal_0
+    drill_fields: []
+  }
+
+  measure: total_impressions {
+    group_label: "Search Events"
+    label: "Total Impressions"
+    type: number
+    sql: ${count_of_search_events} + ${count_of_detail_page_views} ;;
+    drill_fields: []
+  }
+
+  measure: total_converted_sessions {
+    group_label: "Purchase & Transaction Events"
+    label: "Total Converted Sessions"
+    type: count_distinct
+    filters: [event_type: "purchase-complete",product_details_array_length: ">0"]
+    sql: ${session_id} ;;
+  }
+
+  measure: percentage_of_sessions_converted {
+    group_label: "Purchase & Transaction Events"
+    label: "Percentage of Sessions Converted"
+    type: number
+    sql: 1.0*${total_converted_sessions}/NULLIF(${count_of_sessions},0) ;;
+    value_format_name: percent_1
+  }
+
 }
 
 view: tbl_events__product_details {
   dimension: product__cost {
     type: number
     sql: product.cost ;;
-    group_label: "Product"
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     group_item_label: "Cost"
   }
 
   dimension: product__currency_code {
     type: string
     sql: product.currency_code ;;
-    group_label: "Product"
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     group_item_label: "Currency Code"
   }
 
@@ -159,51 +270,57 @@ view: tbl_events__product_details {
     primary_key: yes
     type: string
     sql: product.id ;;
-    group_label: "Product"
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     group_item_label: "ID"
   }
 
   dimension: product__price {
     type: number
     sql: product.price ;;
-    group_label: "Product"
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     group_item_label: "Price"
   }
 
   dimension_group: effective {
+    hidden: yes
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: product.price_effective_time ;;
   }
 
   dimension_group: expire {
+    hidden: yes
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: product.price_expire_time ;;
   }
 
   dimension: quantity {
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     type: number
     sql: quantity ;;
   }
 
+  measure: total_quantity {
+    view_label: "Order Details"
+    type: sum
+    sql: ${quantity} ;;
+  }
+
   dimension: sales_amount {
+    view_label: "Order Details"
+    group_label: "Order Item Details"
     hidden: yes
     type: number
     sql: ${quantity} * ${product__price} ;;
@@ -211,6 +328,7 @@ view: tbl_events__product_details {
   }
 
   measure: total_sales {
+    view_label: "Order Details"
     type: sum
     sql: ${sales_amount} ;;
     value_format_name: usd
