@@ -244,7 +244,23 @@ view: tbl_events {
     label: "Percentage of Sessions Converted"
     type: number
     sql: 1.0*${total_converted_sessions}/NULLIF(${count_of_sessions},0) ;;
-    value_format_name: percent_1
+    value_format_name: percent_4
+  }
+
+  measure: total_converted_customers {
+    group_label: "Purchase & Transaction Events"
+    label: "Total Converted Users"
+    type: count_distinct
+    filters: [event_type: "purchase-complete",product_details_array_length: ">0"]
+    sql: ${user_id} ;;
+  }
+
+  measure: percentage_of_users_converted {
+    group_label: "Purchase & Transaction Events"
+    label: "Percentage of Users Converted"
+    type: number
+    sql: 1.0*${total_converted_customers}/NULLIF(${count_of_users},0) ;;
+    value_format_name: percent_4
   }
 
 }
@@ -328,6 +344,7 @@ view: tbl_events__product_details {
   }
 
   measure: total_sales {
+    hidden: yes
     view_label: "Order Details"
     type: sum
     sql: ${sales_amount} ;;
