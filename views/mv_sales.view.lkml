@@ -22,6 +22,7 @@ view: mv_sales {
   measure: average_basket_size {
     type: average
     sql: ${basket_size} ;;
+    value_format_name: decimal_1
   }
 
   dimension_group: day {
