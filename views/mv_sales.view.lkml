@@ -44,6 +44,11 @@ view: mv_sales {
     sql: ${TABLE}.product_total ;;
   }
 
+  measure: total_product {
+    type: sum
+    sql: ${product_total} ;;
+  }
+
   dimension: session {
     hidden: yes
     type: string
@@ -57,15 +62,17 @@ view: mv_sales {
   }
 
   measure: total_tx_cost {
-    label: "Total Transaction Cost"
+    label: "Total Transaction Costs"
     type: sum
     sql: ${tx_cost} ;;
+    value_format_name: usd
   }
 
   measure: average_tx_cost {
-    label: "Average Transaction Cost"
+    label: "Average Transaction Costs"
     type: average
     sql: ${tx_cost} ;;
+    value_format_name: usd
   }
 
   dimension: tx_cur {
@@ -86,10 +93,31 @@ view: mv_sales {
     sql: ${TABLE}.tx_tax ;;
   }
 
+  measure: total_tax_tx {
+    label: "Total Taxes"
+    type: sum
+    sql: ${tx_tax} ;;
+    value_format_name: usd
+  }
+
   dimension: tx_total {
     type: number
     hidden: yes
     sql: ${TABLE}.tx_total ;;
+  }
+
+  measure: total_tx_total {
+    label: "Total Sales"
+    type: sum
+    sql: ${tx_total} ;;
+    value_format_name: usd
+  }
+
+  measure: average_tx_total {
+    label: "Average Sale"
+    type: average
+    sql: ${tx_total} ;;
+    value_format_name: usd
   }
 
   dimension: user {
@@ -109,4 +137,29 @@ view: mv_sales {
     type: count
     drill_fields: []
   }
+
+  measure: shipping_and_discount {
+    type: number
+    sql: ${total_tx_total}-${product_total}-${total_tax_tx} ;;
+    value_format_name: usd
+  }
+
+  measure: liability {
+    type: number
+    sql: ${total_tax_tx}+${shipping_and_discount} ;;
+    value_format_name: usd
+  }
+
+  dimension: gross_margin {
+    type: number
+    sql: ${tx_total} - ${tx_tax} - ${tx_cost} ;;
+    value_format_name: usd
+  }
+
+  measure: total_gross_margin {
+    type: sum
+    sql: ${gross_margin} ;;
+    value_format_name: usd
+  }
+
 }
