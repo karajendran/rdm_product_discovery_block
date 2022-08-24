@@ -1,6 +1,7 @@
 connection: "looker-retailshared"
 
 include: "/views/*.view.lkml"                # include all views in the views/ folder in this project
+include: "/sessions/*.view.lkml"
 # include: "/**/*.view.lkml"                 # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
@@ -13,6 +14,19 @@ explore: events {
          LEFT JOIN UNNEST([product]) as product
          LEFT JOIN UNNEST([price_info]) as price_info ;;
     relationship: one_to_many
+  }
+
+  join: sessions {
+    type: left_outer
+    sql_on: ${events.session_id} = ${sessions.session_id} ;;
+    relationship: many_to_one
+  }
+
+  join: visitor_facts {
+    view_label: "User"
+    type: left_outer
+    sql_on: ${sessions.visitor_id} = ${visitor_facts.visitor_id} ;;
+    relationship: many_to_one
   }
 
   join: products {

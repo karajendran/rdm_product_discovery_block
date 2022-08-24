@@ -253,6 +253,7 @@ view: tbl_products__conditions {
 
 view: tbl_products__price_info {
   dimension: tbl_products__price_info {
+    hidden: yes
     type: string
     sql: tbl_products__price_info ;;
   }

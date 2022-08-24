@@ -6,7 +6,7 @@ view: tbl_events {
     primary_key: yes
     type: string
     hidden: yes
-    sql: ${event_raw} || ${session_id} ;;
+    sql: ${event_raw} || ${session_id} || ${event_type} ;;
   }
 
   dimension_group: event {
@@ -21,6 +21,18 @@ view: tbl_events {
       year
     ]
     sql: ${TABLE}.event_time ;;
+  }
+
+  measure: min_event {
+    type: date_time
+    sql: MIN(${event_raw}) ;;
+    hidden: yes
+  }
+
+  measure: max_event {
+    type: date_time
+    sql: MAX(${event_raw}) ;;
+    hidden: yes
   }
 
   dimension: event_type {
@@ -38,6 +50,30 @@ view: tbl_events {
               WHEN ${event_type} =  'purchase-complete' THEN '4) Purchase'
               ELSE 'Other'
               END;;
+  }
+
+  dimension: is_detail_page_view {
+    type: yesno
+    sql:  ${event_type} = 'detail-page-view' ;;
+    hidden: yes
+  }
+
+  dimension: is_search {
+    type: yesno
+    sql:  ${event_type} = 'search' ;;
+    hidden: yes
+  }
+
+  dimension: is_add_to_cart {
+    type: yesno
+    sql:  ${event_type} = 'add-to-cart' ;;
+    hidden: yes
+  }
+
+  dimension: is_purchase_complete {
+    type: yesno
+    sql:  ${event_type} = 'purchase-complete' ;;
+    hidden: yes
   }
 
   dimension: product_details {
@@ -118,24 +154,26 @@ view: tbl_events {
   }
 
   dimension: user_id {
+    view_label: "User"
     type: string
     sql: TRIM(UPPER(${TABLE}.user_id)) ;;
   }
 
   measure: count_of_users {
-    group_label: "General Counts"
+    view_label: "User"
     label: "Count of Users"
     type: count_distinct
     sql: ${user_id} ;;
   }
 
   dimension: visitor_id {
+    view_label: "User"
     type: string
     sql: TRIM(UPPER(${TABLE}.visitor_id)) ;;
   }
 
   measure: count_of_visitors {
-    group_label: "General Counts"
+    view_label: "User"
     label: "Count of Visitors"
     type: count_distinct
     sql: ${visitor_id} ;;
