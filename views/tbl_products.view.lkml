@@ -61,6 +61,11 @@ view: tbl_products {
     sql: ${TABLE}.categories ;;
   }
 
+  dimension: price_info {
+    hidden: yes
+    sql: ${TABLE}.price_info ;;
+  }
+
   dimension: colors {
     # hidden: yes
     sql: ${TABLE}.colors ;;
@@ -73,7 +78,7 @@ view: tbl_products {
 
   dimension: cost {
     type: number
-    sql: ${TABLE}.cost ;;
+    sql: cost ;;
   }
 
   measure: average_cost {
@@ -84,7 +89,7 @@ view: tbl_products {
 
   dimension: currency_code {
     type: string
-    sql: ${TABLE}.currency_code ;;
+    sql: currency_code ;;
   }
 
   dimension: description {
@@ -124,7 +129,7 @@ view: tbl_products {
 
   dimension: price {
     type: number
-    sql: ${TABLE}.price ;;
+    sql: price ;;
   }
 
   measure: average_price {
@@ -144,7 +149,7 @@ view: tbl_products {
       quarter,
       year
     ]
-    sql: ${TABLE}.price_effecitve_time ;;
+    sql: price_effecitve_time ;;
   }
 
   dimension_group: price_expire {
@@ -158,7 +163,7 @@ view: tbl_products {
       quarter,
       year
     ]
-    sql: ${TABLE}.price_expire_time ;;
+    sql: price_expire_time ;;
   }
 
   dimension: primary_product_id {
@@ -243,5 +248,12 @@ view: tbl_products__conditions {
   dimension: tbl_products__conditions {
     type: string
     sql: tbl_products__conditions ;;
+  }
+}
+
+view: tbl_products__price_info {
+  dimension: tbl_products__price_info {
+    type: string
+    sql: tbl_products__price_info ;;
   }
 }

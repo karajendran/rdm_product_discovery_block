@@ -21,6 +21,12 @@ explore: events {
     relationship: one_to_many
   }
 
+  join: price_info {
+    from: tbl_products__price_info
+    sql: LEFT JOIN UNNEST(${products.price_info}) as tbl_events__product_details ;;
+    relationship: one_to_many
+    }
+
   join: categories {
     from: tbl_products__categories
     view_label: "Categories"
