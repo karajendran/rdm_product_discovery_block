@@ -10,7 +10,8 @@ explore: events {
   join: product_details {
     from: tbl_events__product_details
     sql: LEFT JOIN UNNEST(${events.product_details}) as tbl_events__product_details
-         LEFT JOIN UNNEST([product]) as product;;
+         LEFT JOIN UNNEST([product]) as product
+         LEFT JOIN UNNEST([price_info]) as price_info ;;
     relationship: one_to_many
   }
 

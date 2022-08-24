@@ -268,7 +268,7 @@ view: tbl_events {
 view: tbl_events__product_details {
   dimension: product__cost {
     type: number
-    sql: product.cost ;;
+    sql: price_info.cost ;;
     view_label: "Order Details"
     group_label: "Order Item Details"
     group_item_label: "Cost"
@@ -276,7 +276,7 @@ view: tbl_events__product_details {
 
   dimension: product__currency_code {
     type: string
-    sql: product.currency_code ;;
+    sql: price_info.currency_code ;;
     view_label: "Order Details"
     group_label: "Order Item Details"
     group_item_label: "Currency Code"
@@ -293,7 +293,7 @@ view: tbl_events__product_details {
 
   dimension: product__price {
     type: number
-    sql: product.price ;;
+    sql: price_info.price ;;
     view_label: "Order Details"
     group_label: "Order Item Details"
     group_item_label: "Price"
@@ -307,7 +307,7 @@ view: tbl_events__product_details {
     timeframes: [
       date
     ]
-    sql: product.price_effective_time ;;
+    sql: price_info.price_effective_time ;;
   }
 
   dimension_group: expire {
@@ -318,7 +318,7 @@ view: tbl_events__product_details {
     timeframes: [
       date
     ]
-    sql: product.price_expire_time ;;
+    sql: price_info.price_expire_time ;;
   }
 
   dimension: quantity {
