@@ -2,6 +2,8 @@ view: tbl_events {
   sql_table_name: `retail-shared-demos.retail.tbl_events`
     ;;
 
+  #### GENERAL DIMENSIONS ####
+
   dimension: pk {
     primary_key: yes
     type: string
@@ -44,13 +46,15 @@ view: tbl_events {
   dimension: event_type_new {
     label: "Event Type"
     type: string
-    sql: CASE WHEN ${event_type} = 'detail-page-view' THEN '1) Detail Page View'
-              WHEN ${event_type} =  'search' THEN '2) Search'
-              WHEN ${event_type} =  'add-to-cart' THEN '3) Add To Cart'
-              WHEN ${event_type} =  'purchase-complete' THEN '4) Purchase'
+    sql: CASE WHEN ${is_detail_page_view} THEN '1) Detail Page View'
+              WHEN ${is_search} THEN '2) Search'
+              WHEN ${is_add_to_cart} THEN '3) Add To Cart'
+              WHEN ${is_purchase_complete} THEN '4) Purchase'
               ELSE 'Other'
               END;;
   }
+
+  #### YES/NO LOGIC FOR EVENT TYPES ####
 
   dimension: is_detail_page_view {
     type: yesno
@@ -75,6 +79,13 @@ view: tbl_events {
     sql:  ${event_type} = 'purchase-complete' ;;
     hidden: yes
   }
+
+  dimension: is_array_above_zero {
+    type: yesno
+    sql: ${product_details_array_length} > 0  ;;
+  }
+
+  #### PRODUCT & EVENT DIMENSIONS/MEASURES ####
 
   dimension: product_details {
     hidden: yes
@@ -195,7 +206,7 @@ view: tbl_events {
     group_label: "Page View Events"
     label: "Count of Detail Page Views"
     type: count
-    filters: [event_type: "detail-page-view"]
+    filters: [is_detail_page_view: "Yes"]
     drill_fields: []
   }
 
@@ -203,7 +214,7 @@ view: tbl_events {
     group_label: "Search Events"
     label: "Count of Search Events"
     type: count
-    filters: [event_type: "search"]
+    filters: [is_search: "Yes"]
     drill_fields: [products.id,products.title,count_of_search_events]
   }
 
@@ -211,7 +222,7 @@ view: tbl_events {
     group_label: "Cart Events"
     label: "Count of Add to Cart Events"
     type: count
-    filters: [event_type: "add-to-cart"]
+    filters: [is_add_to_cart: "Yes"]
     drill_fields: []
   }
 
@@ -219,7 +230,7 @@ view: tbl_events {
     group_label: "Purchase & Transaction Events"
     label: "Count of Purchase Events"
     type: count
-    filters: [event_type: "purchase-complete"]
+    filters: [is_purchase_complete: "Yes"]
     drill_fields: []
   }
 
@@ -227,7 +238,7 @@ view: tbl_events {
     group_label: "Purchase & Transaction Events"
     label: "Count of Purchased Products"
     type: sum
-    filters: [event_type: "purchase-complete"]
+    filters: [is_purchase_complete: "Yes"]
     sql:   ${product_details_array_length} ;;
     drill_fields: []
   }
@@ -236,7 +247,7 @@ view: tbl_events {
     group_label: "Purchase & Transaction Events"
     label: "Average Purchased Products"
     type: average
-    filters: [event_type: "purchase-complete"]
+    filters: [is_purchase_complete: "Yes"]
     sql:   ${product_details_array_length}  ;;
     value_format_name: decimal_0
     drill_fields: []
@@ -246,7 +257,7 @@ view: tbl_events {
     group_label: "Search Events"
     label: "Count of Search Product Results"
     type: sum
-    filters: [event_type: "search"]
+    filters: [is_search: "Yes"]
     sql:   ${product_details_array_length}  ;;
     drill_fields: []
   }
@@ -255,7 +266,7 @@ view: tbl_events {
     group_label: "Search Events"
     label: "Average Search Product Results"
     type: average
-    filters: [event_type: "search"]
+    filters: [is_search: "Yes"]
     sql:  ${product_details_array_length} ;;
     value_format_name: decimal_0
     drill_fields: []
@@ -273,7 +284,7 @@ view: tbl_events {
     group_label: "Purchase & Transaction Events"
     label: "Total Converted Sessions"
     type: count_distinct
-    filters: [event_type: "purchase-complete",product_details_array_length: ">0"]
+    filters: [is_purchase_complete: "Yes",is_array_above_zero: "Yes"]
     sql: ${session_id} ;;
   }
 
@@ -289,7 +300,7 @@ view: tbl_events {
     group_label: "Purchase & Transaction Events"
     label: "Total Converted Users"
     type: count_distinct
-    filters: [event_type: "purchase-complete",product_details_array_length: ">0"]
+    filters: [is_purchase_complete: "Yes",is_array_above_zero: "Yes"]
     sql: ${user_id} ;;
   }
 
@@ -302,6 +313,9 @@ view: tbl_events {
   }
 
 }
+
+#### PRODUCT DETAILS ####
+
 
 view: tbl_events__product_details {
   dimension: product__cost {

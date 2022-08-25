@@ -25,7 +25,7 @@ view: sessions {
     type: string
     primary_key: yes
     hidden: yes
-    sql: ${session_id} || ${visitor_id} ;;
+    sql: ${session_id}  ;;
   }
 
   dimension: session_id {
@@ -36,6 +36,13 @@ view: sessions {
     hidden: yes
     type: number
     sql: ${TABLE}.count ;;
+  }
+
+  measure: average_events_in_session {
+    group_label: "General"
+    type: average
+    sql: ${number_of_events_in_session} ;;
+    value_format_name: decimal_2
   }
 
   dimension: count_of_add_to_cart_events {
@@ -78,14 +85,31 @@ view: sessions {
     type: number
   }
 
+  measure: average_search_queries_per_session {
+    label: "Average Search Queries Per Session"
+    group_label: "Sessions with Events"
+    type: average
+    sql: ${count_of_search_query} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_search_queries_per_session_with_purchase {
+    label: "Average Search Queries Per Session with Purchase"
+    group_label: "Sessions with Events"
+    type: average
+    sql: ${count_of_search_query} ;;
+    value_format_name: decimal_2
+    filters: [count_of_purchase_events: ">0"]
+  }
+
   dimension_group: session_start {
-    hidden: yes
+    # hidden: yes
     type: time
     sql: ${TABLE}.min_event ;;
   }
 
   dimension_group: session_end {
-    hidden: yes
+    # hidden: yes
     type: time
     sql: ${TABLE}.max_event ;;
   }

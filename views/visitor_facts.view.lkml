@@ -101,6 +101,8 @@ view: visitor_facts {
     label: "Average Customer Lifetime Value (LTV)"
     type: average
     sql: ${customer_ltv} ;;
+    filters: [count_of_purchase_product: ">0"]
+    value_format_name: usd
   }
 
   dimension: total_tax_tx {

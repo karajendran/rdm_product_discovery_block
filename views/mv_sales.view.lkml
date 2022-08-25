@@ -151,16 +151,16 @@ view: mv_sales {
     value_format_name: usd
   }
 
-  dimension: gross_margin {
-    type: number
-    sql: ${tx_total} - ${tx_tax} - ${tx_cost} ;;
-    value_format_name: usd
-  }
+  # dimension: gross_margin {
+  #   type: number
+  #   sql: ${tx_total} - ${tx_tax} - ${tx_cost} ;;
+  #   value_format_name: usd
+  # }
 
-  measure: total_gross_margin {
-    type: sum
-    sql: ${gross_margin} ;;
-    value_format_name: usd
-  }
+  # measure: total_gross_margin {
+  #   type: sum
+  #   sql: ${gross_margin} ;;
+  #   value_format_name: usd
+  # }
 
 }
