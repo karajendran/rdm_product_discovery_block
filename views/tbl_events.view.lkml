@@ -321,16 +321,16 @@ view: tbl_events__product_details {
   dimension: product__cost {
     type: number
     sql: price_info.cost ;;
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Product Details"
     group_item_label: "Cost"
   }
 
   dimension: product__currency_code {
     type: string
     sql: price_info.currency_code ;;
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Product Details"
     group_item_label: "Currency Code"
   }
 
@@ -338,23 +338,23 @@ view: tbl_events__product_details {
     primary_key: yes
     type: string
     sql: product.id ;;
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Product Details"
     group_item_label: "ID"
   }
 
   dimension: product__price {
     type: number
     sql: price_info.price ;;
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Product Details"
     group_item_label: "Price"
   }
 
   dimension_group: effective {
     hidden: yes
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Product Details"
     type: time
     timeframes: [
       date
@@ -364,8 +364,8 @@ view: tbl_events__product_details {
 
   dimension_group: expire {
     hidden: yes
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Product Details"
     type: time
     timeframes: [
       date
@@ -374,21 +374,22 @@ view: tbl_events__product_details {
   }
 
   dimension: quantity {
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Purchase Details"
     type: number
     sql: quantity ;;
   }
 
   measure: total_quantity {
-    view_label: "Order Details"
+    view_label: "Events"
+    group_label: "Purchase Details"
     type: sum
     sql: ${quantity} ;;
   }
 
   dimension: sales_amount {
-    view_label: "Order Details"
-    group_label: "Order Item Details"
+    view_label: "Events"
+    group_label: "Purchase Details"
     hidden: yes
     type: number
     sql: ${quantity} * ${product__price} ;;
@@ -397,7 +398,8 @@ view: tbl_events__product_details {
 
   measure: total_sales {
     hidden: yes
-    view_label: "Order Details"
+    view_label: "Events"
+    group_label: "Purchase Details"
     type: sum
     sql: ${sales_amount} ;;
     value_format_name: usd
