@@ -57,30 +57,36 @@ view: tbl_events {
   #### YES/NO LOGIC FOR EVENT TYPES ####
 
   dimension: is_detail_page_view {
+    group_label: "Event Types (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'detail-page-view' ;;
-    hidden: yes
+    # hidden: yes
   }
 
   dimension: is_search {
+    group_label: "Event Types (Yes/No)"
     type: yesno
-    sql:  ${event_type} = 'search' ;;
-    hidden: yes
+    sql:  TRIM(${event_type}) = 'search' ;;
+    # hidden: yes
   }
 
   dimension: is_add_to_cart {
+    group_label: "Event Types (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'add-to-cart' ;;
-    hidden: yes
+    # hidden: yes
   }
 
   dimension: is_purchase_complete {
+    group_label: "Event Types (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'purchase-complete' ;;
-    hidden: yes
+    # hidden: yes
   }
 
   dimension: is_array_above_zero {
+    group_label: "Event Types (Yes/No)"
+    label: "Products Included in Event (Yes/No)"
     type: yesno
     sql: ${product_details_array_length} > 0  ;;
   }
@@ -249,7 +255,7 @@ view: tbl_events {
     type: average
     filters: [is_purchase_complete: "Yes"]
     sql:   ${product_details_array_length}  ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_1
     drill_fields: []
   }
 
@@ -381,8 +387,8 @@ view: tbl_events__product_details {
   }
 
   measure: total_quantity {
-    view_label: "Events"
-    group_label: "Purchase Details"
+    view_label: "Order Details"
+    # group_label: "Purchase Details"
     type: sum
     sql: ${quantity} ;;
   }
@@ -397,9 +403,9 @@ view: tbl_events__product_details {
   }
 
   measure: total_sales {
-    hidden: yes
-    view_label: "Events"
-    group_label: "Purchase Details"
+    # hidden: yes
+    view_label: "Order Details"
+    # group_label: "Purchase Details"
     type: sum
     sql: ${sales_amount} ;;
     value_format_name: usd

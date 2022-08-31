@@ -2,8 +2,8 @@ view: sessions {
   derived_table: {
     explore_source: events {
       column: session_id {}
-      # column: user_id {}
-      column: visitor_id {}
+      column: user_id {}
+      # column: visitor_id {}
       column: count {}
       column: count_of_add_to_cart_events {}
       column: count_of_detail_page_views {}
@@ -24,7 +24,7 @@ view: sessions {
   dimension: pk {
     type: string
     primary_key: yes
-    hidden: yes
+    # hidden: yes
     sql: ${session_id}  ;;
   }
 
@@ -114,15 +114,15 @@ view: sessions {
     sql: ${TABLE}.max_event ;;
   }
 
-  # dimension: user_id {
-  #   hidden: yes
-  #   type: string
-  # }
-
-  dimension: visitor_id {
+  dimension: user_id {
     hidden: yes
     type: string
   }
+
+  # dimension: visitor_id {
+  #   hidden: yes
+  #   type: string
+  # }
 
   dimension: duration {
     label: "Duration (Sec)"
@@ -291,10 +291,10 @@ view: sessions {
   dimension: furthest_funnel_step {
     label: "Furthest Funnel Step"
     sql: CASE
-      WHEN ${count_of_purchase_events} > 0 THEN '(5) Purchase'
-      WHEN ${count_of_add_to_cart_events} > 0 THEN '(4) Add to Cart'
-      WHEN ${count_of_detail_page_views} > 0 THEN '(3) View Product'
-      WHEN ${count_of_search_events} > 0 THEN '(2) Search'
+      WHEN ${count_of_purchase_events} > 0 THEN '(4) Purchase'
+      WHEN ${count_of_add_to_cart_events} > 0 THEN '(3) Add to Cart'
+      WHEN ${count_of_detail_page_views} > 0 THEN '(2) View Product'
+      --WHEN ${count_of_search_events} > 0 THEN '(2) Search'
       ELSE '(1) Land'
       END
        ;;
@@ -306,43 +306,43 @@ view: sessions {
     type: count
   }
 
-  measure: count_search_or_later {
-    group_label: "Funnel View"
-    label: "(2) Search or later"
-    type: count
-    filters: {
-      field: furthest_funnel_step
-      value: "(2) Search,(3) View Product,(4) Add to Cart,(5) Purchase"
-    }
-  }
+  # measure: count_search_or_later {
+  #   group_label: "Funnel View"
+  #   label: "(2) Search or later"
+  #   type: count
+  #   filters: {
+  #     field: furthest_funnel_step
+  #     value: "(2) Search,(3) View Product,(4) Add to Cart,(5) Purchase"
+  #   }
+  # }
 
   measure: count_product_or_later {
     group_label: "Funnel View"
-    label: "(3) View Product or later"
+    label: "(2) View Product or later"
     type: count
     filters: {
       field: furthest_funnel_step
-      value: "(3) View Product,(4) Add to Cart,(5) Purchase"
+      value: "(2) View Product,(3) Add to Cart,(4) Purchase"
     }
   }
 
   measure: count_cart_or_later {
     group_label: "Funnel View"
-    label: "(4) Add to Cart or later"
+    label: "(3) Add to Cart or later"
     type: count
     filters: {
       field: furthest_funnel_step
-      value: "(4) Add to Cart,(5) Purchase"
+      value: "(3) Add to Cart,(4) Purchase"
     }
   }
 
   measure: count_purchase {
     group_label: "Funnel View"
-    label: "(5) Purchase"
+    label: "(4) Purchase"
     type: count
     filters: {
       field: furthest_funnel_step
-      value: "(5) Purchase"
+      value: "(4) Purchase"
     }
   }
 
@@ -351,6 +351,13 @@ view: sessions {
     type: number
     value_format_name: percent_2
     sql: 1.0 * ${count_purchase} / nullif(${count_cart_or_later},0) ;;
+  }
+
+  measure: cart_abandonment_rate {
+    group_label: "Funnel View"
+    type: number
+    sql: 1-${cart_to_checkout_conversion} ;;
+    value_format_name: percent_2
   }
 
   measure: overall_conversion {

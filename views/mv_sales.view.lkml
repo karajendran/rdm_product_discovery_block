@@ -10,16 +10,19 @@ view: mv_sales {
   }
 
   dimension: basket_size {
+    hidden: yes
     type: number
     sql: ${TABLE}.basket_size ;;
   }
 
   measure: total_basket_size {
+    hidden: yes
     type: sum
     sql: ${basket_size} ;;
   }
 
   measure: average_basket_size {
+    # hidden: yes
     type: average
     sql: ${basket_size} ;;
     value_format_name: decimal_1
@@ -41,11 +44,13 @@ view: mv_sales {
   }
 
   dimension: product_total {
+    hidden: yes
     type: number
     sql: ${TABLE}.product_total ;;
   }
 
   measure: total_product {
+    label: "Total Product Sold"
     type: sum
     sql: ${product_total} ;;
   }
@@ -108,6 +113,7 @@ view: mv_sales {
   }
 
   measure: total_tx_total {
+    hidden: yes
     label: "Total Sales"
     type: sum
     sql: ${tx_total} ;;

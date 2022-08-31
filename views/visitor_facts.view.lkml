@@ -13,7 +13,7 @@ view: visitor_facts {
       column: count_of_search_query {}
       column: total_tx_total { field: order_facts.total_tx_total }
       column: total_tax_tx { field: order_facts.total_tax_tx }
-      column: visitor_id {}
+      column: user_id {}
       column: min_event {}
       column: max_event {}
       # bind_all_filters: yes
@@ -110,7 +110,7 @@ view: visitor_facts {
     type: number
   }
 
-  dimension: visitor_id {
+  dimension: user_id {
     hidden: yes
     primary_key: yes
   }

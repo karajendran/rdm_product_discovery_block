@@ -51,6 +51,11 @@ view: tbl_products {
     sql: ${TABLE}.id ;;
   }
 
+  measure: count_of_unique_products {
+    type: count_distinct
+    sql: ${id} ;;
+  }
+
   dimension: brands {
     hidden: yes
     sql: ${TABLE}.brands ;;
@@ -223,8 +228,16 @@ view: tbl_products__images {
 
 view: tbl_products__brands {
   dimension: tbl_products__brands {
+    view_label: "Products"
+    label: "Brand"
     type: string
     sql: tbl_products__brands ;;
+  }
+
+  measure: count_of_unique_brands {
+    view_label: "Products"
+    type: count_distinct
+    sql: ${tbl_products__brands} ;;
   }
 }
 
@@ -241,6 +254,11 @@ view: tbl_products__categories {
     label: "Category"
     type: string
     sql: tbl_products__categories ;;
+  }
+  measure: count_of_unique_categories {
+    view_label: "Products"
+    type: count_distinct
+    sql: ${tbl_products__categories} ;;
   }
 }
 

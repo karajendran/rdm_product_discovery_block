@@ -22,16 +22,30 @@ explore: events {
     relationship: many_to_one
   }
 
+  join: session_event_sequences {
+    view_label: "Search Session Event Details"
+    type: left_outer
+    relationship: many_to_many
+    sql_on: ${sessions.session_id} = ${session_event_sequences.session_id} ;;
+  }
+
   join: visitor_facts {
     view_label: "User"
     type: left_outer
-    sql_on: ${sessions.visitor_id} = ${visitor_facts.visitor_id} ;;
+    sql_on: ${sessions.user_id} = ${visitor_facts.user_id} ;;
     relationship: many_to_one
   }
 
   join: products {
     from: tbl_products
     sql_on: ${product_details.product__id} = ${products.id} ;;
+    relationship: one_to_many
+  }
+
+  join: tbl_products__brands {
+    from: tbl_products__brands
+    # view_label: "Brands"
+    sql: LEFT JOIN UNNEST(${products.brands}) as tbl_products__brands ;;
     relationship: one_to_many
   }
 
@@ -43,7 +57,7 @@ explore: events {
 
   join: categories {
     from: tbl_products__categories
-    view_label: "Categories"
+    # view_label: "Categories"
     sql: LEFT JOIN UNNEST(${products.categories}) as tbl_products__categories ;;
     relationship: one_to_many
   }
@@ -56,3 +70,21 @@ explore: events {
   }
 
 }
+
+# explore: session_event_sequences {
+#   view_label: "Search Session Events"
+#   label: "Search Session Events"
+
+#   join: sessions {
+#     type: left_outer
+#     relationship: many_to_one
+#     sql_on: ${session_event_sequences.session_id} = ${sessions.session_id} ;;
+#   }
+
+#   # join: order_facts {
+#   #   from: mv_sales
+#   #   type: left_outer
+#   #   sql_on: ${sessions.session_id} = ${order_facts.session} ;;
+#   #   relationship: many_to_one
+#   # }
+# }
