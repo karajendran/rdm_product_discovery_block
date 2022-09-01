@@ -453,7 +453,7 @@ view: session_event_sequences {
   }
 
   dimension: is_click_through {
-    # hidden: yes
+    hidden: yes
     type: yesno
     sql: ${is_search} AND ${is_detail_page_view_next} ;;
   }
