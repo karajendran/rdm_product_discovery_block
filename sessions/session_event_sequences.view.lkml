@@ -68,34 +68,39 @@ view: session_event_sequences {
   }
 
   measure: count {
+    label: "Count of Search Session Events"
     type: count
   }
 
   dimension: session_id {
-    # hidden: yes
+    hidden: yes
     type: string
     sql: ${TABLE}.session_id ;;
   }
 
   dimension_group: event {
+    group_label: "First Event Dimensions"
     # hidden: yes
     type: time
     sql: TIMESTAMP(${TABLE}.event_time) ;;
   }
 
   dimension: event_type {
+    group_label: "First Event Dimensions"
     # hidden: yes
     type: string
     sql: ${TABLE}.event_type ;;
   }
 
   dimension: is_detail_page_view {
+    group_label: "Event Type (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'detail-page-view' ;;
     # hidden: yes
   }
 
   dimension: is_search {
+    group_label: "Event Type (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'search' ;;
     # hidden: yes
@@ -108,36 +113,42 @@ view: session_event_sequences {
   }
 
   dimension: is_add_to_cart {
+    group_label: "Event Type (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'add-to-cart' ;;
     hidden: yes
   }
 
   dimension: is_purchase_complete {
+    group_label: "Event Type (Yes/No)"
     type: yesno
     sql:  ${event_type} = 'purchase-complete' ;;
     hidden: yes
   }
 
   dimension: is_detail_page_view_next {
+    group_label: "Next Event Type (Yes/No)"
     type: yesno
     sql:   ${next_event_type} = 'detail-page-view' ;;
     # hidden: yes
   }
 
   dimension: is_search_next {
+    group_label: "Next Event Type (Yes/No)"
     type: yesno
     sql:   ${next_event_type} = 'search' ;;
     hidden: yes
   }
 
   dimension: is_add_to_cart_next {
+    group_label: "Next Event Type (Yes/No)"
     type: yesno
     sql:   ${next_event_type} = 'add-to-cart' ;;
     hidden: yes
   }
 
   dimension: is_purchase_complete_next {
+    group_label: "Next Event Type (Yes/No)"
     type: yesno
     sql:  ${next_event_type} = 'purchase-complete' ;;
     hidden: yes
@@ -151,6 +162,7 @@ view: session_event_sequences {
   # }
 
   dimension: event_id {
+    group_label: "First Event Dimensions"
     # hidden: yes
     primary_key: yes
     type: number
@@ -158,12 +170,15 @@ view: session_event_sequences {
   }
 
   dimension: event_seq {
+    group_label: "First Event Dimensions"
+    label: "Event Sequence"
     # hidden: yes
     type: number
     sql: ${TABLE}.event_seq ;;
   }
 
   dimension: search_query {
+    group_label: "First Event Dimensions"
     label: "Search Query"
     type: string
     sql: ${TABLE}.search_query ;;
@@ -176,17 +191,19 @@ view: session_event_sequences {
   }
 
   dimension: last_search_event_seq {
+    hidden: yes
     type: number
     sql: ${TABLE}.last_search_event_seq ;;
   }
 
   dimension_group: last_search_event {
-    # hidden: yes
+    hidden: yes
     type: time
     sql: TIMESTAMP(${TABLE}.last_search_event_time) ;;
   }
 
   dimension: events_between_search_and_page_view {
+    hidden: yes
     type: number
     sql: CASE WHEN ${is_search} THEN ${next_detail_page_view_event_seq} - ${event_seq} ELSE NULL END ;;
   }
@@ -198,7 +215,7 @@ view: session_event_sequences {
   }
 
   dimension: time_browsing_results {
-    # hidden: yes
+    hidden: yes
     type: number
     sql: CASE WHEN ${is_search} AND ${is_detail_page_view_next}
                                 THEN TIMESTAMP_DIFF(${next_event_raw},${event_raw},second)
@@ -226,6 +243,7 @@ view: session_event_sequences {
   }
 
   dimension: first_search_event_seq_in_session {
+    hidden: yes
     label: "First Search Event in Session"
     type: number
     sql: ${TABLE}.first_search_event_seq_in_session ;;
@@ -276,6 +294,7 @@ view: session_event_sequences {
   }
 
   dimension: first_add_to_cart_event_seq_in_session {
+    hidden: yes
     type: number
     sql: ${TABLE}.first_add_to_cart_event_seq_in_session ;;
   }
@@ -300,6 +319,7 @@ view: session_event_sequences {
   }
 
   dimension: first_purchase_event_seq_in_session {
+    hidden: yes
     type: number
     sql: ${TABLE}.first_purchase_event_seq_in_session ;;
   }
@@ -329,7 +349,8 @@ view: session_event_sequences {
   }
 
   dimension_group: next_event {
-    hidden: yes
+    group_label: "Next Event Dimensions"
+    # hidden: yes
     type: time
     sql: TIMESTAMP(${TABLE}.next_event_time) ;;
   }
@@ -360,67 +381,79 @@ view: session_event_sequences {
   }
 
   dimension: next_search_event_seq {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_search_event_seq ;;
   }
 
   dimension: next_detail_page_view {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_detail_page_view ;;
   }
 
   dimension: next_detail_page_view_time {
+    hidden: yes
     type: string
     sql: ${TABLE}.next_detail_page_view_time ;;
   }
 
   dimension: next_detail_page_view_event_seq {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_detail_page_view_event_seq ;;
   }
 
   dimension: next_add_to_cart_event {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_add_to_cart_event ;;
   }
 
   dimension: next_add_to_cart_event_time {
+    hidden: yes
     type: string
     sql: ${TABLE}.next_add_to_cart_event_time ;;
   }
 
   dimension: next_add_to_cart_event_seq {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_add_to_cart_event_seq ;;
   }
 
   dimension: next_purchase_event {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_purchase_event ;;
   }
 
   dimension: next_purchase_event_time {
+    hidden: yes
     type: string
     sql: ${TABLE}.next_purchase_event_time ;;
   }
 
   dimension: next_purchase_event_seq {
+    hidden: yes
     type: number
     sql: ${TABLE}.next_purchase_event_seq ;;
   }
 
   dimension: next_event_type {
+    group_label: "Next Event Dimensions"
     type: string
     sql: NULLIF(${TABLE}.next_event_type,'Bounce') ;;
   }
 
   dimension: next_search_query {
+    group_label: "Next Event Dimensions"
     type: string
     sql: ${TABLE}.next_search_query ;;
   }
 
   dimension: is_click_through {
-    hidden: yes
+    # hidden: yes
     type: yesno
     sql: ${is_search} AND ${is_detail_page_view_next} ;;
   }
@@ -433,7 +466,7 @@ view: session_event_sequences {
   measure: click_through_rate {
     label: "Clickthrough Rate (CTR)"
     type: number
-    sql: 1.0*${total_click_throughs}/NULLIF(${count},0) ;;
+    sql: 1.0*${total_click_throughs}/NULLIF(${count_of_search_events},0) ;;
     value_format_name: percent_2
   }
 
