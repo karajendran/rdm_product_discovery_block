@@ -1,8 +1,8 @@
+# include: "/views/*.view.lkml"                # include all views in the views/ folder in this project
 view: session_event_sequences {
   derived_table: {
     sql: WITH session_flat as
           (SELECT
-
          session_id
          ,event_time
          ,event_type
