@@ -262,6 +262,7 @@ view: tbl_events {
   measure: count_of_search_product_results {
     group_label: "Search Events"
     label: "Count of Search Product Results"
+    description: "Number of products surfaced in result set for search queries."
     type: sum
     filters: [is_search: "Yes"]
     sql:   ${product_details_array_length}  ;;
@@ -271,6 +272,7 @@ view: tbl_events {
   measure: average_search_product_results {
     group_label: "Search Events"
     label: "Average Search Product Results"
+    description: "Average number of products surfaced in result set for search queries."
     type: average
     filters: [is_search: "Yes"]
     sql:  ${product_details_array_length} ;;
@@ -281,6 +283,7 @@ view: tbl_events {
   measure: total_impressions {
     group_label: "Search Events"
     label: "Total Impressions"
+    description: "How many times a product was viewed either during search or a detailed page view."
     type: number
     sql: ${count_of_search_events} + ${count_of_detail_page_views} ;;
     drill_fields: []
@@ -297,6 +300,7 @@ view: tbl_events {
   measure: percentage_of_sessions_converted {
     group_label: "Purchase & Transaction Events"
     label: "Percentage of Sessions Converted"
+    description: "Number of sessions with a purchase event divided by total session count."
     type: number
     sql: 1.0*${total_converted_sessions}/NULLIF(${count_of_sessions},0) ;;
     value_format_name: percent_4

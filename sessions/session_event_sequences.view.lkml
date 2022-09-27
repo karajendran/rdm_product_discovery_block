@@ -209,6 +209,7 @@ view: session_event_sequences {
   }
 
   measure: average_events_between_search_and_page_view  {
+    description: "Average number of events between a search and a subsequent detail page view for a product. "
     type: average
     sql: ${events_between_search_and_page_view} ;;
     value_format_name: decimal_1
@@ -225,6 +226,8 @@ view: session_event_sequences {
   }
 
   measure: average_time_browsing_results {
+    label: "Average Time Between Search & Page View (Sec)"
+    description: "Average number of events between a search and a subsequent detail page view for a product. "
     type: average
     sql: ${time_browsing_results} ;;
     value_format_name: decimal_2
@@ -459,12 +462,15 @@ view: session_event_sequences {
   }
 
   measure: total_click_throughs {
+    description: "Count of searches that lead to immediate subsequent product page view."
+    label: "Total Search-to-Page Views"
     type: count
     filters: [is_click_through:"Yes"]
   }
 
   measure: click_through_rate {
-    label: "Clickthrough Rate (CTR)"
+    label: "Search-to-Page View Rate"
+    description: "How often searches lead to immediate subsequent product page view."
     type: number
     sql: 1.0*${total_click_throughs}/NULLIF(${count_of_search_events},0) ;;
     value_format_name: percent_2
@@ -483,7 +489,8 @@ view: session_event_sequences {
   }
 
   measure: purchase_rate_per_search {
-    label: "Search to Purchase Rate"
+    label: "Search-to-Purchase Rate"
+    description: "How often searches lead to a purchase event."
     type: number
     sql: 1.0*${total_search_to_purchase}/NULLIF(${count_of_search_events},0) ;;
     value_format_name: percent_2

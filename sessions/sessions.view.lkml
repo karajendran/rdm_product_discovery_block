@@ -3,7 +3,6 @@ view: sessions {
     explore_source: events {
       column: session_id {}
       column: user_id {}
-      # column: visitor_id {}
       column: count {}
       column: count_of_add_to_cart_events {}
       column: count_of_detail_page_views {}
@@ -15,7 +14,6 @@ view: sessions {
       column: count_of_search_query {}
       column: min_event {}
       column: max_event {}
-      # bind_all_filters: yes
     }
   }
 
@@ -40,6 +38,7 @@ view: sessions {
 
   measure: average_events_in_session {
     group_label: "General"
+    description: "Average number of individual events recorded in a session."
     type: average
     sql: ${number_of_events_in_session} ;;
     value_format_name: decimal_2
@@ -126,6 +125,7 @@ view: sessions {
 
   dimension: duration {
     label: "Duration (Sec)"
+    description: "Seconds between first and last event times. "
     type: duration_second
     sql_start: ${session_start_raw} ;;
     sql_end: ${session_end_raw} ;;
@@ -134,12 +134,14 @@ view: sessions {
   measure: average_duration {
     group_label: "General"
     label: "Average Duration (Sec)"
+    description: "Average seconds between first and last event times. "
     type: average
     value_format_name: decimal_2
     sql: ${duration} ;;
   }
 
   dimension: duration_seconds_tier {
+    description: "Seconds between first and last event times. "
     label: "Duration Tier (Sec)"
     type: tier
     tiers: [10, 30, 60, 120, 300]
@@ -176,11 +178,13 @@ view: sessions {
 
   dimension: is_bounce_session {
     label: "Is Bounce Session"
+    description: "Single event session."
     type: yesno
     sql: ${number_of_events_in_session} = 1 ;;
   }
 
   measure: count_bounce_sessions {
+    description: "Count of single event sessions."
     group_label: "Bounce"
     label: "Count (Bounce Sessions)"
     type: count
@@ -194,6 +198,7 @@ view: sessions {
   measure: percent_bounce_sessions {
     group_label: "Bounce"
     label: "% Bounce Sessions"
+    description: "Count of single event sessions divided by total session count."
     type: number
     value_format_name: percent_2
     sql: 1.0 * ${count_bounce_sessions} / nullif(${count_of_sessions},0) ;;
@@ -362,6 +367,7 @@ view: sessions {
 
   measure: overall_conversion {
     group_label: "Funnel View"
+    description: "Count of sessions that result in a purchase divided by total count of sessions."
     type: number
     value_format_name: percent_2
     sql: 1.0 * ${count_purchase} / nullif(${count_of_sessions},0) ;;
