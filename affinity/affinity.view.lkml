@@ -133,20 +133,25 @@ view: affinity {
 
 #############################################
 #Table that aggregates the products purchased by user and order id
+
+# If necessary, uncomment the line below to include explore_source.
+# include: "base.model.lkml"
+
+# If necessary, uncomment the line below to include explore_source.
+# include: "base.model.lkml"
+
+explore: user_order_product {}
 view: user_order_product {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
-    sql: SELECT
-        oi.user_id AS user_id
-        , p.id AS prod_id
-        , oi.order_id AS order_id
-      FROM looker-private-demo.ecomm.order_items oi
-      LEFT JOIN looker-private-demo.ecomm.inventory_items ii
-        ON oi.inventory_item_id = ii.id
-      LEFT JOIN looker-private-demo.ecomm. products p
-        ON ii.product_id = p.id
-      GROUP BY 1,2,3
-       ;;
+    explore_source: events {
+      column: user_id {field: events.visitor_id}
+      column: prod_id { field: product_details.product__id }
+      column: order_id {field: events.purchase_transaction__id}
+      filters: {
+        field: events.is_purchase_complete
+        value: "Yes"
+      }
+    }
   }
 
 #   measure: count {
@@ -175,19 +180,20 @@ view: user_order_product {
 
 #################################################
 #Table to count the total times a product id has been purchased
-view: total_order_product {
+
+# If necessary, uncomment the line below to include explore_source.
+# include: "base.model.lkml"
+
+view: total_order_product  {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
-    sql: SELECT
-        p.id AS prod_id
-        , COUNT(*) AS prod_freq
-      FROM looker-private-demo.ecomm.order_items oi
-      LEFT JOIN looker-private-demo.ecomm.inventory_items
-        ON oi.inventory_item_id = inventory_items.id
-      LEFT JOIN looker-private-demo.ecomm.products p
-        ON inventory_items.product_id = p.id
-      GROUP BY p.id
-       ;;
+    explore_source: events {
+      column: prod_id { field: product_details.product__id }
+      column: prod_freq {field: events.count}
+      filters: {
+        field: events.is_purchase_complete
+        value: "Yes"
+      }
+    }
   }
 
 #   measure: count {

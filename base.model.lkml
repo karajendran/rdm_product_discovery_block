@@ -2,6 +2,7 @@ connection: "looker-retailshared"
 
 include: "/views/*.view.lkml"                # include all views in the views/ folder in this project
 include: "/sessions/*.view.lkml"
+include: "/affinity/*.view.lkml"
 # include: "/**/*.view.lkml"                 # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
@@ -70,6 +71,35 @@ explore: events {
   }
 
 }
+
+explore: affinity {
+  label: "Affinity Analysis"
+
+  always_filter: {
+    filters: {
+      field: affinity.product_b_id
+      value: "-NULL"
+    }
+  }
+
+  join: product_a {
+    from: tbl_products
+    type: left_outer
+    view_label: "Product A Details"
+    relationship: many_to_one
+    sql_on: ${affinity.product_a_id} = ${product_a.id} ;;
+  }
+
+  join: product_b {
+    from: tbl_products
+    type: left_outer
+    view_label: "Product B Details"
+    relationship: many_to_one
+    sql_on: ${affinity.product_b_id} = ${product_b.id} ;;
+  }
+}
+
+
 
 # explore: session_event_sequences {
 #   view_label: "Search Session Events"
