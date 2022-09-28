@@ -23,6 +23,7 @@ view: mv_sales {
 
   measure: average_basket_size {
     # hidden: yes
+    description: "Average number of products included in a given purchase."
     type: average
     sql: ${basket_size} ;;
     value_format_name: decimal_1
@@ -51,6 +52,7 @@ view: mv_sales {
 
   measure: total_product {
     label: "Total Product Sold"
+    description: "Total number of products sold."
     type: sum
     sql: ${product_total} ;;
   }
