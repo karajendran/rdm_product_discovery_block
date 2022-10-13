@@ -411,7 +411,7 @@ view: tbl_events__product_details {
     view_label: "Order Details"
     # group_label: "Purchase Details"
     type: sum
-    sql: ${sales_amount} ;;
+    sql: ${sales_amount}  ;;
     value_format_name: usd
   }
 
