@@ -1,5 +1,5 @@
 view: mv_sales {
-  sql_table_name: `retail-shared-demos.retail.mv_sales`
+  sql_table_name: @{SALES_MATERIALIZED_VIEW}
     ;;
 
   dimension: primary_key {

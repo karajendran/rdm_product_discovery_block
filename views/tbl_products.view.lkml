@@ -40,7 +40,7 @@ explore: tbl_products {
 }
 
 view: tbl_products {
-  sql_table_name: `retail-shared-demos.retail.tbl_products`
+  sql_table_name: @{PRODUCTS_TABLE}
     ;;
   drill_fields: [id]
 

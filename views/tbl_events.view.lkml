@@ -1,5 +1,5 @@
 view: tbl_events {
-  sql_table_name: `retail-shared-demos.retail.tbl_events`
+  sql_table_name: @{EVENTS_TABLE}
     ;;
 
   #### GENERAL DIMENSIONS ####

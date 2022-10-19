@@ -1,4 +1,4 @@
-connection: "looker-retailshared"
+connection: "@{CONNECTION}"
 
 include: "/explores/events.explore.lkml"
 include: "/explores/affinity.explore.lkml"
