@@ -1,51 +1,3 @@
-# Un-hide and use this explore, or copy the joins into another explore, to get all the fully nested relationships from this view
-explore: tbl_products {
-  hidden: yes
-
-  join: tbl_products__sizes {
-    view_label: "Tbl Products: Sizes"
-    sql: LEFT JOIN UNNEST(${tbl_products.sizes}) as tbl_products__sizes ;;
-    relationship: one_to_many
-  }
-
-  join: tbl_products__images {
-    view_label: "Tbl Products: Images"
-    sql: LEFT JOIN UNNEST(${tbl_products.images}) as tbl_products__images ;;
-    relationship: one_to_many
-  }
-
-  join: tbl_products__brands {
-    view_label: "Tbl Products: Brands"
-    sql: LEFT JOIN UNNEST(${tbl_products.brands}) as tbl_products__brands ;;
-    relationship: one_to_many
-  }
-
-  join: tbl_products__colors {
-    view_label: "Tbl Products: Colors"
-    sql: LEFT JOIN UNNEST(${tbl_products.colors}) as tbl_products__colors ;;
-    relationship: one_to_many
-  }
-
-  join: tbl_products__categories {
-    view_label: "Tbl Products: Categories"
-    sql: LEFT JOIN UNNEST(${tbl_products.categories}) as tbl_products__categories ;;
-    relationship: one_to_many
-  }
-
-  join: tbl_products__conditions {
-    view_label: "Tbl Products: Conditions"
-    sql: LEFT JOIN UNNEST(${tbl_products.conditions}) as tbl_products__conditions ;;
-    relationship: one_to_many
-  }
-
-  join: price_info {
-    from: tbl_products__price_info
-    view_label: "Tbl Products: Price Info"
-    sql: LEFT JOIN UNNEST(${tbl_products.price_info} as tbl_products__price_info ;;
-    relationship: one_to_many
-  }
-}
-
 view: tbl_products {
   sql_table_name: @{PRODUCTS_TABLE}
     ;;
@@ -88,9 +40,23 @@ view: tbl_products {
     sql: ${TABLE}.conditions ;;
   }
 
+  # dimension: cost {
+  #   type: number
+  #   sql: ${price_info}.cost ;;
+  # }
+
   dimension: cost {
+    view_label: "Products"
+    label: "Cost"
     type: number
-    sql: ${price_info.tbl_products__price_info}.cost ;;
+    sql: ${price_info}.cost ;;
+  }
+
+  dimension: currency_code {
+    view_label: "Products"
+    label: "Currency Code"
+    type: number
+    sql: ${price_info}.currency_code ;;
   }
 
   measure: average_cost {
@@ -99,10 +65,10 @@ view: tbl_products {
     value_format_name: usd_0
   }
 
-  dimension: currency_code {
-    type: string
-    sql: currency_code ;;
-  }
+  # dimension: currency_code {
+  #   type: string
+  #   sql: currency_code ;;
+  # }
 
   dimension: description {
     type: string
@@ -221,6 +187,8 @@ view: tbl_products {
 
 view: tbl_products__sizes {
   dimension: tbl_products__sizes {
+    view_label: "Products"
+    label: "Sizes"
     type: string
     sql: tbl_products__sizes ;;
   }
@@ -228,6 +196,8 @@ view: tbl_products__sizes {
 
 view: tbl_products__images {
   dimension: tbl_products__images {
+    view_label: "Products"
+    label: "Images"
     type: string
     sql: tbl_products__images ;;
   }
@@ -250,6 +220,8 @@ view: tbl_products__brands {
 
 view: tbl_products__colors {
   dimension: tbl_products__colors {
+    view_label: "Products"
+    label: "Colors"
     type: string
     sql: tbl_products__colors ;;
   }
@@ -271,15 +243,33 @@ view: tbl_products__categories {
 
 view: tbl_products__conditions {
   dimension: tbl_products__conditions {
+    view_label: "Products"
+    label: "Conditions"
     type: string
     sql: tbl_products__conditions ;;
   }
 }
 
-view: tbl_products__price_info {
-  dimension: tbl_products__price_info {
-    hidden: yes
-    type: string
-    sql: tbl_products__price_info ;;
-  }
-}
+# view: tbl_products__price_info {
+#   dimension: tbl_products__price_info {
+#     view_label: "Products"
+#     label: "Price Info"
+#     hidden: yes
+#     type: string
+#     sql: tbl_products__price_info ;;
+#   }
+
+#   dimension: cost {
+#     view_label: "Products"
+#     label: "Cost"
+#     type: number
+#     sql: ${tbl_products__price_info}.cost ;;
+#   }
+
+#   dimension: currency_code {
+#     view_label: "Products"
+#     label: "Currency Code"
+#     type: number
+#     sql: ${tbl_products__price_info}.currency_code ;;
+#   }
+# }

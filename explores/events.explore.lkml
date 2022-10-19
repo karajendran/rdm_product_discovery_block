@@ -44,29 +44,44 @@ explore: events {
     relationship: one_to_many
   }
 
-  join: tbl_products__brands {
+  join: brands {
     from: tbl_products__brands
-    # view_label: "Brands"
     sql: LEFT JOIN UNNEST(${products.brands}) as tbl_products__brands ;;
-    relationship: one_to_many
-  }
-
-  join: price_info {
-    from: tbl_products__price_info
-    sql: LEFT JOIN UNNEST(${products.price_info}) as tbl_events__product_details ;;
     relationship: one_to_many
   }
 
   join: categories {
     from: tbl_products__categories
-    # view_label: "Categories"
     sql: LEFT JOIN UNNEST(${products.categories}) as tbl_products__categories ;;
+    relationship: one_to_many
+  }
+
+  join: sizes {
+    from: tbl_products__sizes
+    sql: LEFT JOIN UNNEST(${products.sizes}) as tbl_products__sizes ;;
+    relationship: one_to_many
+  }
+
+  join: images {
+    from: tbl_products__images
+    sql: LEFT JOIN UNNEST(${products.images}) as tbl_products__images ;;
+    relationship: one_to_many
+  }
+
+  join: colors {
+    from: tbl_products__colors
+    sql: LEFT JOIN UNNEST(${products.colors}) as tbl_products__colors ;;
+    relationship: one_to_many
+  }
+
+  join: conditions {
+    from: tbl_products__conditions
+    sql: LEFT JOIN UNNEST(${products.conditions}) as tbl_products__conditions ;;
     relationship: one_to_many
   }
 
   join: order_facts {
     from: mv_sales
-    view_label: "Order Details"
     sql_on: ${events.purchase_transaction__id} = ${order_facts.tx_id} ;;
     relationship: one_to_many
   }
