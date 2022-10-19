@@ -696,7 +696,7 @@
     model: base
     explore: events
     type: looker_funnel
-    fields: [sessions.all_sessions, sessions.count_search_or_later, sessions.count_product_or_later,
+    fields: [sessions.all_sessions, sessions.count_product_or_later,
       sessions.count_cart_or_later, sessions.count_purchase]
     limit: 500
     leftAxisLabelVisible: false
@@ -871,7 +871,7 @@
     model: base
     explore: events
     type: looker_funnel
-    fields: [sessions.all_sessions, sessions.count_search_or_later, sessions.count_product_or_later]
+    fields: [sessions.all_sessions, sessions.count_product_or_later]
     limit: 500
     leftAxisLabelVisible: false
     leftAxisLabel: ''
