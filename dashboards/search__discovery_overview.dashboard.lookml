@@ -1593,7 +1593,7 @@
     model: base
     explore: events
     type: looker_wordcloud
-    fields: [events.count_of_search_events, tbl_products__brands.tbl_products__brands]
+    fields: [events.count_of_search_events, brands.tbl_products__brands]
     filters:
       categories.tbl_products__categories: "-NULL"
     sorts: [events.count_of_search_events desc 0]
@@ -1644,7 +1644,7 @@
     model: base
     explore: events
     type: single_value
-    fields: [events.period, tbl_products__brands.count_of_unique_brands]
+    fields: [events.period, brands.count_of_unique_brands]
     filters:
       events.compare_to: Period
       events.is_purchase_complete: 'Yes'

@@ -311,15 +311,15 @@ view: sessions {
     type: count
   }
 
-  # measure: count_search_or_later {
-  #   group_label: "Funnel View"
-  #   label: "(2) Search or later"
-  #   type: count
-  #   filters: {
-  #     field: furthest_funnel_step
-  #     value: "(2) Search,(3) View Product,(4) Add to Cart,(5) Purchase"
-  #   }
-  # }
+  measure: count_search_or_later {
+    group_label: "Funnel View"
+    label: "(2) Search or later"
+    type: count
+    filters: {
+      field: furthest_funnel_step
+      value: "(2) Search,(3) View Product,(4) Add to Cart,(5) Purchase"
+    }
+  }
 
   measure: count_product_or_later {
     group_label: "Funnel View"

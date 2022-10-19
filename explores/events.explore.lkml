@@ -4,6 +4,7 @@ include: "/views/sessions/session_event_sequences.view.lkml"
 include: "/views/visitor_facts.view.lkml"
 include: "/views/tbl_products.view.lkml"
 include: "/views/mv_sales.view.lkml"
+include: "/views/period_over_period.view"
 
 
 
