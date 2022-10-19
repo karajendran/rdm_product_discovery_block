@@ -37,6 +37,13 @@ explore: tbl_products {
     sql: LEFT JOIN UNNEST(${tbl_products.conditions}) as tbl_products__conditions ;;
     relationship: one_to_many
   }
+
+  join: price_info {
+    from: tbl_products__price_info
+    view_label: "Tbl Products: Price Info"
+    sql: LEFT JOIN UNNEST(${tbl_products.price_info} as tbl_products__price_info ;;
+    relationship: one_to_many
+  }
 }
 
 view: tbl_products {
@@ -83,7 +90,7 @@ view: tbl_products {
 
   dimension: cost {
     type: number
-    sql: cost ;;
+    sql: ${price_info.tbl_products__price_info}.cost ;;
   }
 
   measure: average_cost {
